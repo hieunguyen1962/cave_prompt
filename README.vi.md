@@ -6,8 +6,49 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](packages/python)
 [![Node](https://img.shields.io/badge/node-18%2B-green)](packages/typescript)
+[![CI](https://github.com/hieudeptrai196/cave_prompt/actions/workflows/ci.yml/badge.svg)](https://github.com/hieudeptrai196/cave_prompt/actions/workflows/ci.yml)
 
 > Trình biên dịch prompt theo ngữ nghĩa / lớp IR — không phải chatbot.
+
+---
+
+## Prompt thông thường vs Cave Prompt
+
+Hầu hết các pipeline LLM gửi thẳng text thô của người dùng vào model. Model tự diễn giải theo cách riêng — và bạn không bao giờ thấy nó đã hiểu gì, có bỏ sót constraint nào không, hay tại sao hai input tương tự lại cho output khác nhau.
+
+Cave Prompt biến bước diễn giải đó thành **artifact tường minh, máy đọc được**.
+
+```
+# Không dùng Cave Prompt
+User input ──────────────────────────────────► LLM ──► Answer
+               (intent được hiểu ngầm, không ai thấy)
+
+# Dùng Cave Prompt
+User input ──► [Cave Prompt] ──► IR + Execution Prompt ──► LLM ──► Answer
+                  ↓
+       semantic_analysis  (hệ thống đã hiểu gì?)
+       optimized_ir       (LLM cần làm gì?)
+       fidelity_score     (bao nhiêu % ý nghĩa được giữ nguyên?)
+       verbatim_spans     (đoạn nào không được paraphrase?)
+```
+
+| | Prompt thông thường | Cave Prompt |
+|---|:---:|:---:|
+| Intent được trích xuất tường minh | ✗ | ✅ |
+| Hidden constraint được phát hiện | ✗ | ✅ |
+| Output nhất quán dù diễn đạt khác nhau | ✗ | ✅ |
+| IR máy đọc được để routing / logging | ✗ | ✅ |
+| Phát hiện ambiguity trước khi thực thi | ✗ | ✅ |
+| Code / số / tên riêng được bảo vệ verbatim | ✗ | ✅ |
+| Dùng được với bất kỳ model nào | ✅ | ✅ |
+| Cache & tái sử dụng cho request tương tự | ✗ | ✅ |
+| Prompt caching (system prompt được cache xuyên suốt các lần gọi) | ✗ | ✅ |
+| IR chuẩn hoá giảm cache miss | ✗ | ✅ |
+
+> **Phù hợp nhất khi:** xây pipeline, batch processing, hệ thống multi-agent, request lặp lại nhiều lần, model downstream yếu hơn.  
+> **Nên bỏ qua khi:** query một lần tới frontier model mạnh, chat realtime cần độ trễ thấp.
+>
+> **Về caching:** Cave Prompt gửi spec cốt lõi dưới dạng system prompt được cache (Anthropic prompt caching, TTL 5 phút). Execution prompt đã chuẩn hoá mà nó tạo ra ổn định dù người dùng diễn đạt khác nhau — nghĩa là cùng một intent vẫn hit cache của model downstream dù wording thay đổi. Trong batch hoặc pipeline, lợi ích này nhân lên: ít cache miss hơn, chi phí token thấp hơn, latency p50 nhanh hơn.
 
 ```
 User Input → [Cave Prompt] → Optimized Execution Prompt → Main LLM
