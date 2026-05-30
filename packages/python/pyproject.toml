@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cave-prompt"
+version = "1.0.0"
+description = "Semantic prompt compiler: turn a raw prompt into an optimized execution prompt + machine-readable IR."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["anthropic>=0.40", "jsonschema>=4.21"]
+
+[project.urls]
+Homepage = "https://github.com/hieudeptrai196/cave_prompt"
+Repository = "https://github.com/hieudeptrai196/cave_prompt"
+Issues = "https://github.com/hieudeptrai196/cave_prompt/issues"
+
+[project.scripts]
+cave = "cave_prompt.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cave_prompt"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/cave_prompt/_data" = "cave_prompt/_data"

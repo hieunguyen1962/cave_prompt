@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hieudeptrai196/cave_prompt/schema/semantic-analysis.schema.json",
+  "title": "Cave Prompt — Semantic Analysis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intent", "domain", "entities", "constraints", "priorities", "response_preferences", "ambiguities", "hidden_requirements"],
+  "properties": {
+    "intent": { "type": "string", "minLength": 1 },
+    "domain": { "type": "string" },
+    "entities": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "object" },
+    "priorities": { "type": "array", "items": { "type": "string" } },
+    "response_preferences": { "type": "object" },
+    "ambiguities": { "type": "array", "items": { "type": "string" } },
+    "hidden_requirements": { "type": "array", "items": { "type": "string" } }
+  }
+}

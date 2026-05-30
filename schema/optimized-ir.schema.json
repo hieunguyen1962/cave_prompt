@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hieudeptrai196/cave_prompt/schema/optimized-ir.schema.json",
+  "title": "Cave Prompt — Optimized Prompt IR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_type", "execution_requirements", "context_priority", "reasoning_mode", "tool_requirements"],
+  "properties": {
+    "task_type": { "type": "string", "minLength": 1 },
+    "execution_requirements": { "type": "array", "items": { "type": "string" } },
+    "context_priority": { "type": "object" },
+    "reasoning_mode": { "type": "string" },
+    "tool_requirements": { "type": "array", "items": { "type": "string" } }
+  }
+}
