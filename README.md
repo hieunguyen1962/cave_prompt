@@ -47,7 +47,10 @@ For space-constrained fields (e.g. custom instructions), use [`prompt/cave_promp
 **Requirements:** Python 3.10+, `ANTHROPIC_API_KEY` set in your environment.
 
 ```bash
-# Install
+# Install from GitHub (available now)
+pip install "git+https://github.com/hieudeptrai196/cave_prompt.git#subdirectory=packages/python"
+
+# Install from PyPI (coming soon — once published)
 pip install cave-prompt
 # or, for isolated install (recommended):
 pipx install cave-prompt
@@ -84,10 +87,10 @@ print(result.semantic_analysis)
 **Requirements:** Node.js 18+, `ANTHROPIC_API_KEY` set in your environment.
 
 ```bash
-# Install globally
+# Install from npm (coming soon — once published)
 npm install -g cave-prompt
 
-# Or run without installing
+# Or run without installing (coming soon)
 npx cave-prompt compile "your prompt here"
 
 # Compile a prompt
