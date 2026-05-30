@@ -6,8 +6,45 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](packages/python)
 [![Node](https://img.shields.io/badge/node-18%2B-green)](packages/typescript)
+[![CI](https://github.com/hieudeptrai196/cave_prompt/actions/workflows/ci.yml/badge.svg)](https://github.com/hieudeptrai196/cave_prompt/actions/workflows/ci.yml)
 
 > A semantic prompt compiler / IR layer — not a chatbot.
+
+---
+
+## Raw prompt vs Cave Prompt
+
+Most LLM pipelines send the user's raw text directly to the model. The model silently does its own interpretation — and you never see what it understood, whether it missed a constraint, or why two similar inputs produced different outputs.
+
+Cave Prompt makes that interpretation step **explicit and machine-readable**.
+
+```
+# Without Cave Prompt
+User input ─────────────────────────────────► LLM ──► Answer
+                  (intent extracted silently)
+
+# With Cave Prompt
+User input ──► [Cave Prompt] ──► IR + Execution Prompt ──► LLM ──► Answer
+                  ↓
+       semantic_analysis  (what did it understand?)
+       optimized_ir       (what should the LLM do?)
+       fidelity_score     (how much meaning was preserved?)
+       verbatim_spans     (what must never be paraphrased?)
+```
+
+| | Raw prompt | Cave Prompt |
+|---|:---:|:---:|
+| Intent explicitly extracted | ✗ | ✅ |
+| Hidden constraints surfaced | ✗ | ✅ |
+| Consistent output across rephrasings | ✗ | ✅ |
+| Machine-readable IR for routing / logging | ✗ | ✅ |
+| Ambiguity caught before execution | ✗ | ✅ |
+| Code / numbers / names verbatim-protected | ✗ | ✅ |
+| Works with any downstream model | ✅ | ✅ |
+| Caching & reuse across similar requests | ✗ | ✅ |
+
+> **When it pays off most:** pipelines, batch jobs, multi-agent systems, repeated request types, weaker downstream models.  
+> **When to skip it:** one-off queries to a strong frontier model, realtime chat where latency matters.
 
 ```
 User Input → [Cave Prompt] → Optimized Execution Prompt → Main LLM
