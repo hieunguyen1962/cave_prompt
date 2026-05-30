@@ -42,9 +42,13 @@ User input ──► [Cave Prompt] ──► IR + Execution Prompt ──► LLM
 | Code / số / tên riêng được bảo vệ verbatim | ✗ | ✅ |
 | Dùng được với bất kỳ model nào | ✅ | ✅ |
 | Cache & tái sử dụng cho request tương tự | ✗ | ✅ |
+| Prompt caching (system prompt được cache xuyên suốt các lần gọi) | ✗ | ✅ |
+| IR chuẩn hoá giảm cache miss | ✗ | ✅ |
 
 > **Phù hợp nhất khi:** xây pipeline, batch processing, hệ thống multi-agent, request lặp lại nhiều lần, model downstream yếu hơn.  
 > **Nên bỏ qua khi:** query một lần tới frontier model mạnh, chat realtime cần độ trễ thấp.
+>
+> **Về caching:** Cave Prompt gửi spec cốt lõi dưới dạng system prompt được cache (Anthropic prompt caching, TTL 5 phút). Execution prompt đã chuẩn hoá mà nó tạo ra ổn định dù người dùng diễn đạt khác nhau — nghĩa là cùng một intent vẫn hit cache của model downstream dù wording thay đổi. Trong batch hoặc pipeline, lợi ích này nhân lên: ít cache miss hơn, chi phí token thấp hơn, latency p50 nhanh hơn.
 
 ```
 User Input → [Cave Prompt] → Optimized Execution Prompt → Main LLM

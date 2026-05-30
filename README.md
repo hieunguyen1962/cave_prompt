@@ -42,9 +42,13 @@ User input ──► [Cave Prompt] ──► IR + Execution Prompt ──► LLM
 | Code / numbers / names verbatim-protected | ✗ | ✅ |
 | Works with any downstream model | ✅ | ✅ |
 | Caching & reuse across similar requests | ✗ | ✅ |
+| Prompt caching (system prompt cached across calls) | ✗ | ✅ |
+| Normalized IR reduces cache misses | ✗ | ✅ |
 
 > **When it pays off most:** pipelines, batch jobs, multi-agent systems, repeated request types, weaker downstream models.  
 > **When to skip it:** one-off queries to a strong frontier model, realtime chat where latency matters.
+>
+> **On caching:** Cave Prompt sends its core spec as a cached system prompt (Anthropic prompt caching, 5-min TTL). The normalized execution prompt it produces is stable across rephrasings — meaning the same intent hits the downstream model's cache even when the user's wording changes. In batch or pipeline scenarios this compounds: fewer cache misses, lower token cost, faster p50 latency.
 
 ```
 User Input → [Cave Prompt] → Optimized Execution Prompt → Main LLM
